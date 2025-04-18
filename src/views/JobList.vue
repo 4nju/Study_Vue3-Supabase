@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <router-view />
+  <h1>Job List</h1>
 </template>
 
 <style lang="scss" scoped></style>
