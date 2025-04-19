@@ -28,6 +28,9 @@ const handleLogin = async () => {
 </script>
 
 <template>
+  <div v-if="isLoading" class="loading_info">
+    <p>회원가입 처리중...</p>
+  </div>
   <div class="form-container">
     <form @submit.prevent="handleLogin">
       <div class="form-group">

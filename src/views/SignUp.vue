@@ -109,14 +109,4 @@ const handleSignup = async () => {
 
 <style lang="scss" scoped>
 @use "../styles/form.scss";
-
-.loading_info {
-  position: fixed;
-  width: 100%;
-  height: 100vh;
-  background: rgba(#000, 0.5);
-  color: #fff;
-  display: grid;
-  place-items: center;
-}
 </style>
