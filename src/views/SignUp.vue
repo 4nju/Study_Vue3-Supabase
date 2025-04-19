@@ -1,13 +1,37 @@
 <script setup>
 import { ref } from "vue";
+import supabase from "../supabase";
 
 const email = ref("");
 const password = ref("");
 const tel = ref("");
 const text = ref("");
+const name = ref("");
+const address = ref("");
 
-const handleSignup = () => {
-  console.log(email.value, password.value, tel.value, text.value);
+const handleSignup = async () => {
+  const { data, error } = await supabase.auth.signUp({
+    email: email.value,
+    password: password.value,
+  });
+
+  if (error) {
+    alert(error.message);
+  } else {
+    console.log("회원가입 성공");
+
+    const { error } = await supabase.from("user_table").insert({
+      tel: tel.value,
+      text: text.value,
+      name: name.value,
+      address: address.value,
+    });
+
+    if (error) {
+      alert("에러");
+      console.log(error);
+    }
+  }
 };
 </script>
 
@@ -41,6 +65,26 @@ const handleSignup = () => {
           v-model="tel"
           type="tel"
           placeholder="전화번호 입력"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input
+          id="name"
+          v-model="name"
+          type="text"
+          placeholder="이름 입력"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input
+          id="address"
+          v-model="address"
+          type="text"
+          placeholder="주소 입력"
           required
         />
       </div>
