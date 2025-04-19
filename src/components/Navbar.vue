@@ -9,7 +9,6 @@ let title = ref("");
 
 watch(route, (newPath) => {
   currentPath = newPath.path;
-  console.log(currentPath);
 
   if (currentPath === "/") {
     title.value = "로그인";

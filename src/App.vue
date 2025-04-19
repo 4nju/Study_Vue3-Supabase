@@ -7,4 +7,6 @@ import Navbar from "./components/Navbar.vue";
   <router-view />
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+@use "./styles/form.scss";
+</style>

@@ -27,7 +27,6 @@ onMounted(async () => {
   } = await supabase.auth.getUser();
 
   if (user) {
-    console.log("로그인 상태");
     isLogin.value = true;
 
     // 유저 정보 가져오기
@@ -41,7 +40,6 @@ onMounted(async () => {
       text.value = data[0].text;
     }
   } else {
-    console.log("로그아웃 상태");
     isLogin.value = false;
     alert("로그인 후 이용해주세요.");
     router.push("/");
@@ -69,8 +67,6 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
-@use "../styles/form.scss";
-
 button {
   background: transparent;
   color: var(--main-color);

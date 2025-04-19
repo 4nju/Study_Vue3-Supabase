@@ -32,7 +32,6 @@ const handleSignup = async () => {
 
     if (error) {
       alert("에러");
-      console.log(error);
     } else {
       alert("회원가입 성공");
       isLoading.value = false;
@@ -107,6 +106,4 @@ const handleSignup = async () => {
   </div>
 </template>
 
-<style lang="scss" scoped>
-@use "../styles/form.scss";
-</style>
+<style lang="scss" scoped></style>

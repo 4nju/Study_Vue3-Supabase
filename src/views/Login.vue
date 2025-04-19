@@ -20,7 +20,6 @@ const handleLogin = async () => {
   if (error) {
     alert(error.message);
   } else {
-    console.log("로그인 성공");
     isLoading.value = false;
     router.push("/job-list");
   }
@@ -29,7 +28,7 @@ const handleLogin = async () => {
 
 <template>
   <div v-if="isLoading" class="loading_info">
-    <p>회원가입 처리중...</p>
+    <p>로그인 처리중...</p>
   </div>
   <div class="form-container">
     <form @submit.prevent="handleLogin">
@@ -59,6 +58,4 @@ const handleLogin = async () => {
   </div>
 </template>
 
-<style lang="scss" scoped>
-@use "../styles/form.scss";
-</style>
+<style lang="scss" scoped></style>
