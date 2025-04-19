@@ -1,11 +1,29 @@
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import supabase from "../supabase";
+
+const router = useRouter();
+const isLoading = ref(false);
 
 const email = ref("");
 const password = ref("");
 
-const handleLogin = () => {
-  console.log(email.value, password.value);
+const handleLogin = async () => {
+  isLoading.value = true;
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email.value,
+    password: password.value,
+  });
+
+  if (error) {
+    alert(error.message);
+  } else {
+    console.log("로그인 성공");
+    isLoading.value = false;
+    router.push("/job-list");
+  }
 };
 </script>
 

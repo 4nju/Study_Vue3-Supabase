@@ -3,8 +3,8 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import supabase from "../supabase";
 
-const isLoading = ref(false);
 const router = useRouter();
+const isLoading = ref(false);
 
 const email = ref("");
 const password = ref("");
@@ -14,7 +14,7 @@ const name = ref("");
 const address = ref("");
 
 const handleSignup = async () => {
-  isLoading.value - true;
+  isLoading.value = true;
   const { data, error } = await supabase.auth.signUp({
     email: email.value,
     password: password.value,
