@@ -7,6 +7,7 @@ import { useAuth } from "../auth/auth";
 
 const router = useRouter();
 const { user, isLogin, checkLoginStatus } = useAuth();
+const isLoading = ref(false);
 
 const title = ref("");
 const todo = ref("");
@@ -16,8 +17,31 @@ const desc = ref("");
 const company_name = ref("");
 const location = ref("");
 const tel = ref("");
-const previewImage = ref(null);
 
+const handleSubmit = async () => {
+  isLoading.value = true;
+  const { error } = await supabase.from("job_posts").insert({
+    title: title.value,
+    todo: todo.value,
+    pay_rule: pay_rule.value,
+    pay: pay.value,
+    desc: desc.value,
+    company_name: company_name.value,
+    location: location.value,
+    tel: tel.value,
+    img_url: "https://placehold.co/400x250",
+  });
+
+  if (error) {
+    alert(error.message);
+  } else {
+    alert("등록 성공");
+    router.push("/job-list");
+  }
+  isLoading.value = false;
+};
+
+const previewImage = ref(null);
 const onFileChange = (e) => {
   const file = e.target.files[0];
 
@@ -29,7 +53,6 @@ const onFileChange = (e) => {
 
 onMounted(async () => {
   await checkLoginStatus();
-  console.log(isLogin.value, user.value);
 });
 
 onUnmounted(() => {
@@ -40,8 +63,11 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <div v-if="isLoading" class="loading_info">
+    <p>저장중...</p>
+  </div>
   <div v-if="isLogin" class="form-container">
-    <form>
+    <form @submit.prevent="handleSubmit">
       <div class="form-group">
         <label for="title">제목</label>
         <input
@@ -160,6 +186,7 @@ onUnmounted(() => {
         </label>
         <input id="photo" type="file" accept="image/*" @change="onFileChange" />
       </div>
+      <button class="btn-submit">등록하기</button>
     </form>
   </div>
 </template>
