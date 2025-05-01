@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { Icon } from "@iconify/vue";
 import supabase from "../supabase";
@@ -16,10 +16,26 @@ const desc = ref("");
 const company_name = ref("");
 const location = ref("");
 const tel = ref("");
+const previewImage = ref(null);
+
+const onFileChange = (e) => {
+  const file = e.target.files[0];
+
+  if (file) {
+    previewImage.value = URL.createObjectURL(file);
+    console.log(previewImage.value);
+  }
+};
 
 onMounted(async () => {
   await checkLoginStatus();
   console.log(isLogin.value, user.value);
+});
+
+onUnmounted(() => {
+  if (previewImage.value) {
+    URL.revokeObjectURL(previewImage.value);
+  }
 });
 </script>
 
@@ -126,10 +142,23 @@ onMounted(async () => {
               width="64"
               height="64"
             />
-            <img src="/box64.jpg" alt="미리보기" width="64" height="64" />
+            <img
+              v-if="previewImage"
+              :src="previewImage"
+              alt="미리보기"
+              width="64"
+              height="64"
+            />
+            <img
+              v-else
+              src="/box64.jpg"
+              alt="미리보기"
+              width="64"
+              height="64"
+            />
           </figure>
         </label>
-        <input id="photo" type="file" accept="image/*" />
+        <input id="photo" type="file" accept="image/*" @change="onFileChange" />
       </div>
     </form>
   </div>
