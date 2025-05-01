@@ -1,6 +1,12 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { Icon } from "@iconify/vue";
+import supabase from "../supabase";
+import { useAuth } from "../auth/auth";
+
+const router = useRouter();
+const { user, isLogin, checkLoginStatus } = useAuth();
 
 const title = ref("");
 const todo = ref("");
@@ -10,10 +16,15 @@ const desc = ref("");
 const company_name = ref("");
 const location = ref("");
 const tel = ref("");
+
+onMounted(async () => {
+  await checkLoginStatus();
+  console.log(isLogin.value, user.value);
+});
 </script>
 
 <template>
-  <div class="form-container">
+  <div v-if="isLogin" class="form-container">
     <form>
       <div class="form-group">
         <label for="title">제목</label>
