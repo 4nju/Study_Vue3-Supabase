@@ -17,7 +17,7 @@ watch(route, (newPath) => {
   } else if (currentPath === "/job-post") {
     title.value = "구인등록";
   } else if (currentPath === "/job-list") {
-    title.value = "상세보기";
+    title.value = "구인목록";
   } else if (currentPath === "/job-detail") {
     title.value = "땅콩알바";
   } else if (currentPath === "/user-profile") {
