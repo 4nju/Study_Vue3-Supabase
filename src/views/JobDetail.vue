@@ -3,12 +3,30 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import supabase from "../supabase";
 import { useAuth } from "../auth/auth";
+import { el } from "date-fns/locale";
 
 const route = useRoute();
 const router = useRouter();
 const { user, isLogin, checkLoginStatus } = useAuth();
 const id = route.params.id;
 const post = ref();
+
+const handleDelete = async () => {
+  const conf = confirm("정말 삭제하시겠습니까?");
+
+  if (!conf) {
+    return;
+  }
+
+  const { error } = await supabase.from("job_posts").delete().eq("id", id);
+
+  if (error) {
+    alert("글 삭제 실패");
+  } else {
+    alert("글 삭제 성공");
+    router.push("/job-list");
+  }
+};
 
 onMounted(async () => {
   await checkLoginStatus();
@@ -57,7 +75,7 @@ onMounted(async () => {
       <router-link class="btn-tel" :to="`/job-post-update/${post.id}`">
         수정
       </router-link>
-      <button class="btn-apply">삭제</button>
+      <button class="btn-apply" @click="handleDelete()">삭제</button>
     </div>
   </section>
 </template>
