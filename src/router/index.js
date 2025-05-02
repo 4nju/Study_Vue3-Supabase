@@ -11,7 +11,7 @@ const routes = [
   { path: "/signup", component: SignUp },
   { path: "/job-post", component: JobPost },
   { path: "/job-list", component: JobList },
-  { path: "/job-detail", component: JobDetail },
+  { path: "/job-detail/:id", component: JobDetail },
   { path: "/user-profile", component: UserProfile },
 ];
 

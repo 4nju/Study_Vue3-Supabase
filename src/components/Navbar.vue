@@ -18,8 +18,8 @@ watch(route, (newPath) => {
     title.value = "구인등록";
   } else if (currentPath === "/job-list") {
     title.value = "구인목록";
-  } else if (currentPath === "/job-detail") {
-    title.value = "땅콩알바";
+  } else if (currentPath.startsWith("/job-detail")) {
+    title.value = "상세보기";
   } else if (currentPath === "/user-profile") {
     title.value = "프로필";
   }
@@ -41,7 +41,9 @@ watch(route, (newPath) => {
       <Icon icon="material-symbols:close-rounded" width="24" height="24" />
     </router-link>
     <router-link
-      v-if="currentPath === '/job-detail' || currentPath === '/user-profile'"
+      v-if="
+        currentPath.startsWith('/job-detail') || currentPath === '/user-profile'
+      "
       to="/job-list"
       class="btn-close"
     >
