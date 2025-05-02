@@ -16,6 +16,8 @@ watch(route, (newPath) => {
     title.value = "회원가입";
   } else if (currentPath === "/job-post") {
     title.value = "구인등록";
+  } else if (currentPath.startsWith("/job-list-update")) {
+    title.value = "구인등록 수정";
   } else if (currentPath === "/job-list") {
     title.value = "구인목록";
   } else if (currentPath.startsWith("/job-detail")) {
@@ -33,7 +35,8 @@ watch(route, (newPath) => {
       v-if="
         currentPath === '/' ||
         currentPath === '/signup' ||
-        currentPath === '/job-post'
+        currentPath === '/job-post' ||
+        currentPath.startsWith('/job-post-update')
       "
       to="/job-list"
       class="btn-close"

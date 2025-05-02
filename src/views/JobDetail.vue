@@ -54,7 +54,9 @@ onMounted(async () => {
       <button class="btn-apply">지원하기</button>
     </div>
     <div class="bottom-btn-group" v-else>
-      <button class="btn-tel">수정</button>
+      <router-link class="btn-tel" :to="`/job-post-update/${post.id}`">
+        수정
+      </router-link>
       <button class="btn-apply">삭제</button>
     </div>
   </section>
@@ -107,12 +109,16 @@ h2 {
   width: 100%;
   display: flex;
 
-  button {
+  button,
+  a {
     width: 50%;
     border-radius: 0;
     padding-top: 14px;
     padding-bottom: 14px;
     margin: 0;
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
     cursor: pointer;
   }
 

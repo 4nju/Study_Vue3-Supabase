@@ -1,11 +1,12 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { Icon } from "@iconify/vue";
 import supabase from "../supabase";
 import { useAuth } from "../auth/auth";
 
-const router = useRouter();
+const router = useRouter(); // 페이지 이동 모듈
+const route = useRoute(); // params, 경로 참조
 const { user, isLogin, checkLoginStatus } = useAuth();
 const isLoading = ref(false);
 
@@ -20,22 +21,25 @@ const tel = ref("");
 
 const handleSubmit = async () => {
   isLoading.value = true;
-  const { error } = await supabase.from("job_posts").insert({
-    title: title.value,
-    todo: todo.value,
-    pay_rule: pay_rule.value,
-    pay: pay.value,
-    desc: desc.value,
-    company_name: company_name.value,
-    location: location.value,
-    tel: tel.value,
-    img_url: "https://placehold.co/400x250",
-  });
+  const { error } = await supabase
+    .from("job_posts")
+    .update({
+      title: title.value,
+      todo: todo.value,
+      pay_rule: pay_rule.value,
+      pay: pay.value,
+      desc: desc.value,
+      company_name: company_name.value,
+      location: location.value,
+      tel: tel.value,
+      img_url: "https://placehold.co/400x250",
+    })
+    .eq("id", route.params.id);
 
   if (error) {
     alert(error.message);
   } else {
-    alert("등록 성공");
+    alert("글 수정 성공");
     router.push("/job-list");
   }
   isLoading.value = false;
@@ -51,8 +55,28 @@ const onFileChange = (e) => {
   }
 };
 
+const getPost = async () => {
+  const { data, error } = await supabase
+    .from("job_posts")
+    .select()
+    .eq("id", route.params.id)
+    .single();
+  console.log(data);
+
+  title.value = data.title;
+  todo.value = data.todo;
+  pay_rule.value = data.pay_rule;
+  pay.value = data.pay;
+  desc.value = data.desc;
+  company_name.value = data.company_name;
+  location.value = data.location;
+  tel.value = data.tel;
+  previewImage.value = data.img_url;
+};
+
 onMounted(async () => {
   await checkLoginStatus();
+  getPost();
 });
 
 onUnmounted(() => {
@@ -186,7 +210,7 @@ onUnmounted(() => {
         </label>
         <input id="photo" type="file" accept="image/*" @change="onFileChange" />
       </div>
-      <button class="btn-submit">등록하기</button>
+      <button class="btn-submit">수정완료</button>
     </form>
   </div>
 </template>
