@@ -3,13 +3,60 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import supabase from "../supabase";
 import { useAuth } from "../auth/auth";
-import { el } from "date-fns/locale";
 
 const route = useRoute();
 const router = useRouter();
 const { user, isLogin, checkLoginStatus } = useAuth();
 const id = route.params.id;
-const post = ref();
+const post = ref(null);
+const isApplied = ref(false);
+
+const checkApply = async () => {
+  const { data, error } = await supabase
+    .from("job_apply_list")
+    .select()
+    .eq("applicant_id", user.value.id)
+    .eq("post_id", id);
+
+  if (error) {
+    alert("오류가 발생했습니다.");
+    return;
+  }
+
+  if (data.length > 0) {
+    isApplied.value = true;
+  }
+};
+
+const handleApply = async () => {
+  const { data, error } = await supabase
+    .from("user_table")
+    .select()
+    .eq("id", user.value.id)
+    .single();
+
+  if (error) {
+    alert("오류가 발생했습니다.");
+    return;
+  }
+
+  const { error: err } = await supabase.from("job_apply_list").insert({
+    job_title: post.value.title,
+    employer_id: post.value.author,
+    applicant_id: user.value.id,
+    applicant_name: data.name,
+    applicant_tel: data.tel,
+    post_id: post.value.id,
+  });
+
+  if (err) {
+    alert("오류가 발생했습니다.");
+    return;
+  } else {
+    alert("지원이 완료되었습니다.");
+    router.push("/job-list");
+  }
+};
 
 const handleDelete = async () => {
   const conf = confirm("정말 삭제하시겠습니까?");
@@ -45,6 +92,8 @@ onMounted(async () => {
       return;
     }
   }
+
+  checkApply();
 });
 </script>
 
@@ -68,8 +117,11 @@ onMounted(async () => {
     </div>
     <!-- 하단 고정 버튼 -->
     <div class="bottom-btn-group" v-if="post && post.author !== user.id">
-      <button class="btn-tel">전화문의</button>
-      <button class="btn-apply">지원하기</button>
+      <a class="btn-tel" :href="`tel:${post.tel}`">전화문의</a>
+      <button v-if="!isApplied" class="btn-apply" @click="handleApply()">
+        지원하기
+      </button>
+      <button v-else class="btn-apply-disabled">지원완료</button>
     </div>
     <div class="bottom-btn-group" v-else>
       <router-link class="btn-tel" :to="`/job-post-update/${post.id}`">
@@ -146,6 +198,11 @@ h2 {
 
   .btn-apply {
     background-color: var(--main-color-light);
+  }
+
+  .btn-apply-disabled {
+    background-color: #ccc;
+    cursor: default;
   }
 }
 </style>
